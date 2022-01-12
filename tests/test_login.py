@@ -14,6 +14,7 @@ class TestLogin:
 
     def test_title(self, browser):
         login_page = SauceDemoLoginPage(browser)
+        login_page.load()
         assert login_page.title() == "Swag Labs"
 
     @pytest.mark.parametrize("username, password",
