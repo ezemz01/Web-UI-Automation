@@ -3,14 +3,12 @@ from pages.inventory import SauceDemoInventoryPage
 from pages.login import SauceDemoLoginPage
 
 
-# from selenium.webdriver.remote.webelement import WebElement
-
-
 class TestInventory:
 
-    @pytest.mark.parametrize("username, password", [("standard_user", "secret_sauce")])
+    @pytest.mark.parametrize("username, password",
+                             [("standard_user", "secret_sauce"), ("problem_user", "secret_sauce")])
     @pytest.mark.parametrize("sort_option", ["lohi", "hilo"])
-    def test_sort_lohi(self, browser, username, password, sort_option):
+    def test_sort(self, browser, username, password, sort_option):
         login_page = SauceDemoLoginPage(browser)
         login_page.load()
         login_page.login_with_enter(username, password)
@@ -23,3 +21,13 @@ class TestInventory:
             assert prices == sorted(prices, reverse=True)
         else:
             raise Exception(f"Invalid parameter: {sort_option}")
+
+    @pytest.mark.parametrize("username, password",
+                             [("standard_user", "secret_sauce"), ("problem_user", "secret_sauce")])
+    def test_add_products(self, browser, username, password):
+        login_page = SauceDemoLoginPage(browser)
+        login_page.load()
+        login_page.login_with_click(username, password)
+        inventory_page = SauceDemoInventoryPage(browser)
+        inventory_page.add_products_bulk(4)
+        assert inventory_page.get_cart_badge_counter() == 4

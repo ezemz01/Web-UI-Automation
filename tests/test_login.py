@@ -29,10 +29,19 @@ class TestLogin:
         # assert driver.current_url == "https://www.saucedemo.com/inventory.html"
 
     @pytest.mark.parametrize("username, password", [("locked_out_user", "secret_sauce")])
-    def test_login_negative(self, browser, username, password):
+    def test_login_negative_locked(self, browser, username, password):
         login_page = SauceDemoLoginPage(browser)
         login_page.load()
         login_page.login_with_click(username, password)
         errorbox = login_page.get_errorbox_element()
         assert errorbox.is_displayed()
         assert errorbox.text == "Epic sadface: Sorry, this user has been locked out."
+
+    @pytest.mark.parametrize("username, password", [("test", "test")])
+    def test_login_negative_invalid(self, browser, username, password):
+        login_page = SauceDemoLoginPage(browser)
+        login_page.load()
+        login_page.login_with_click(username, password)
+        errorbox = login_page.get_errorbox_element()
+        assert errorbox.is_displayed()
+        assert errorbox.text == "Epic sadface: Username and password do not match any user in this service"
