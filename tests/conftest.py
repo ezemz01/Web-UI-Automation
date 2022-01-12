@@ -14,6 +14,7 @@ def config(scope='session'):
     # assert config['implicit_wait'] > 0
     yield config
 
+
 @pytest.fixture
 def browser(config):
     try:

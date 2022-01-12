@@ -1,5 +1,5 @@
 {
-  "browser": "Firefox",
+  "browser": "Chrome",
   "login_data": {
     "regular_users": {"username": "standard", "password": "secret_sauce"},
     "problem_users": {"username": "problem_user", "password": "secret_sauce"}
