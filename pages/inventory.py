@@ -7,6 +7,8 @@ from selenium.webdriver.common.by import By
 
 class SauceDemoInventoryPage:
     # Locators
+    BURGER_MENU = (By.ID, "react-burger-menu-btn")
+    LOGOUT_BUTTON = (By.ID, "logout_sidebar_link")
     PRODUCT_SORT = (By.CLASS_NAME, "product_sort_container")
     PRODUCT_ELEMENTS = (By.CLASS_NAME, "inventory_item")
     PRODUCT_PRICES = (By.CLASS_NAME, "inventory_item_price")
@@ -16,6 +18,12 @@ class SauceDemoInventoryPage:
     # Initializer
     def __init__(self, browser):
         self.browser = browser
+
+    def open_menu(self):
+        self.browser.find_element(*self.BURGER_MENU).click()
+
+    def get_current_url(self):
+        return self.browser.current_url
 
     def sort_products(self, value):
         """Sort products selecting a dropdown option (lohi, hilo, az, za)"""
@@ -43,6 +51,12 @@ class SauceDemoInventoryPage:
         if n <= len(products):
             for product in products[:n]:
                 self.add_product(product)
+        else:
+            raise IndexError
 
     def get_cart_badge_counter(self):
         return int(self.browser.find_element(*self.CART_BADGE_COUNTER).text)
+
+    def logout(self):
+        self.open_menu()
+        self.browser.find_element(*self.LOGOUT_BUTTON).click()

@@ -1,17 +1,17 @@
 """Collection of fixtures to use across tests"""
 import pytest
 from selenium import webdriver
-# from selenium.webdriver.remote.webdriver import WebDriver
 import json
 
 
+# add fixture to retrieve data
 @pytest.fixture
 def config(scope='session'):
-    with open('../config.json') as config_file:
+    with open('config.json') as config_file:
         config = json.load(config_file)
     assert config['browser'] in ['Firefox', 'Chrome', 'Headless Chrome']
-    # assert isinstance(config['implicit_wait'], int)
-    # assert config['implicit_wait'] > 0
+    assert isinstance(config['implicit_wait'], int)
+    assert config['implicit_wait'] > 0
     yield config
 
 

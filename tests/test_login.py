@@ -12,10 +12,15 @@ from pages.login import SauceDemoLoginPage
 class TestLogin:
     # maybe add config as parameter and use to parametrize input
 
+    PAGE_TITLE = "Swag Labs"
+    HOMEPAGE_PATH = "inventory.html"
+    ERRORMSG_LOCKED_USER = "Epic sadface: Sorry, this user has been locked out."
+    ERRORMSG_INVALID_USER = "Epic sadface: Username and password do not match any user in this service"
+
     def test_title(self, browser):
         login_page = SauceDemoLoginPage(browser)
         login_page.load()
-        assert login_page.title() == "Swag Labs"
+        assert login_page.title() == self.PAGE_TITLE
 
     @pytest.mark.parametrize("username, password",
                              [("standard_user", "secret_sauce"), ("problem_user", "secret_sauce")])
@@ -23,10 +28,7 @@ class TestLogin:
         login_page = SauceDemoLoginPage(browser)
         login_page.load()
         login_page.login_with_enter(username, password)
-        assert login_page.get_current_url() == "https://www.saucedemo.com/inventory.html"
-        # driver.find_element(By.ID, "user-name").send_keys(username)
-        # driver.find_element(By.ID, "password").send_keys(password, Keys.RETURN)
-        # assert driver.current_url == "https://www.saucedemo.com/inventory.html"
+        assert login_page.get_current_url().endswith(self.HOMEPAGE_PATH)
 
     @pytest.mark.parametrize("username, password", [("locked_out_user", "secret_sauce")])
     def test_login_negative_locked(self, browser, username, password):
@@ -35,7 +37,7 @@ class TestLogin:
         login_page.login_with_click(username, password)
         errorbox = login_page.get_errorbox_element()
         assert errorbox.is_displayed()
-        assert errorbox.text == "Epic sadface: Sorry, this user has been locked out."
+        assert errorbox.text == self.ERRORMSG_LOCKED_USER
 
     @pytest.mark.parametrize("username, password", [("test", "test")])
     def test_login_negative_invalid(self, browser, username, password):
@@ -44,4 +46,4 @@ class TestLogin:
         login_page.login_with_click(username, password)
         errorbox = login_page.get_errorbox_element()
         assert errorbox.is_displayed()
-        assert errorbox.text == "Epic sadface: Username and password do not match any user in this service"
+        assert errorbox.text == self.ERRORMSG_INVALID_USER

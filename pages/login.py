@@ -1,7 +1,7 @@
 """Login page of the Sauce Demo webpage"""
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
+from pages.inventory import SauceDemoInventoryPage
 
 class SauceDemoLoginPage:
     URL = "https://www.saucedemo.com/"
